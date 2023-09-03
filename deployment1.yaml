@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prabhatapi
+spec:
+  replicas: 2 # Number of desired pods
+  selector:
+    matchLabels:
+      app: prabhatapi
+  template:
+    metadata:
+      labels:
+        app: prabhatapi
+    spec:
+      containers:
+      - name: prabhatapi-container
+        image: mauryaprabhat2/prabhatapi:v1.1 
+        ports:
+        - containerPort: 80 # Replace with the port your application listens on
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: prabhatapi-service
+spec:
+  selector:
+    app: prabhatapi
+  ports:
+    - protocol: TCP
+      port: 80 # Port on the service
+      targetPort: 80 # Port on the pods
+  type: LoadBalancer

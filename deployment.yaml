@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prabhatapi-deployment
+  annotations:
+    kubernetes.io/change-cause: "Initial deployment of the app"
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: prabhatapi-app
+  template:
+    metadata:
+      name: prabhatapi
+      labels: 
+        env: prod
+        app: prabhatapi-app
+        app.kubernetes.io/name: prabhatapi-app
+    spec: 
+      containers:
+        - name: prabhatapi-app
+          image: mauryaprabhat2/prabhatapi:v1.1
+          ports:
+            - containerPort: 80
+              name: http-web-api
+          resources:
+            requests:
+              cpu: 100m
+              memory: 100Mi
+            limits:
+              cpu: 200m
+              memory: 200Mi
+          env:
+              - name: ASPNETCORE_URLS
+                value: http://+:80
+
+
+---
+
+
+apiVersion: v1
+kind: Service
+metadata: 
+  name: prabhatapi-app
+spec:
+  selector: 
+    app.kubernetes.io/name: prabhatapi-app
+  ports:
+    - name: prabhatapi-app-port
+      protocol: TCP
+      port: 8080
+      targetPort: 80
+  type: LoadBalancer
+
+
+
+
+          
+
+
+
+
